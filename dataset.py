@@ -179,8 +179,19 @@ if __name__ == '__main__':
     if label_mode == 'cate_int':
         use_cate_int = True
 
-    X_train, Y_train, all_class, X_valid, Y_valid = auto_split_data_multiprocessing_faster(route_dataset, valid_ratio, test_ratio, seed)
+    # X_train, Y_train, all_class, X_valid, Y_valid = auto_split_data_multiprocessing_faster(route_dataset, valid_ratio, test_ratio, seed)
     
+    X_train, Y_train, all_class = get_data_from_phrase_multiprocessing(route_dataset, None, use_y_int=False)
+
+    route_extra = '/home/lap14880/face_bucket_huy/masked_glint'
+    X_extra, Y_extra, extra_class = get_data_from_phrase_multiprocessing(route_extra, None, use_y_int=False)
+
+    X_train += X_extra
+    Y_train += Y_extra
+    all_class += extra_class
+
+    Y_train = [all_class.index(x) for x in Y_train]
+
     train_n_images = len(Y_train)
     train_dataset = build_dataset_from_X_Y(X_train, Y_train, all_class, train_with_labels, label_mode, img_size,
                                            BATCH_SIZE, train_repeat, train_shuffle, train_augment, im_size_before_crop)

@@ -72,7 +72,7 @@ if __name__ == "__main__":
     from utils import *
     from multiprocess_dataset import *
 
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+    os.environ["CUDA_VISIBLE_DEVICES"]=""
 
     settings = get_settings()
     globals().update(settings)
@@ -88,7 +88,10 @@ if __name__ == "__main__":
 
     n_labels = 100
 
-    base = get_base_model(base_name, input_shape)
-    emb_model = create_emb_model(base, final_dropout, have_emb_layer, emb_dim)
+    # base = get_base_model(base_name, input_shape)
+    # emb_model = create_emb_model(base, final_dropout, have_emb_layer, emb_dim)
+
+    emb_model = tf.keras.models.load_model('download/encoder_v1_best_model_EfficientNetV2S_160_512_364103.h5')
+
     model = create_model(input_shape, emb_model, n_labels, use_normdense, use_cate_int)
     model.summary()

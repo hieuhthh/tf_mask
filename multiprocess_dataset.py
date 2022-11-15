@@ -24,7 +24,7 @@ def get_data_from_phrase_multiprocessing(route, phrase=None, use_y_int=True):
         X = []
         Y = []
 
-        for cl in list_cls[:10]:
+        for cl in list_cls:
             path2cl = os.path.join(phrase_path, cl)
             temp = glob(path2cl + '/*')
             X += temp
@@ -199,7 +199,7 @@ def auto_split_fast_raw_data(X_path, Y_int, valid_ratio=0.1, test_ratio=None, se
         Y_valid = df_valid['label'].values
         Y_train = df_train['label'].values
 
-        return X_train, Y_train, all_class, X_valid, Y_valid, X_test, Y_test
+        return X_train, Y_train, X_valid, Y_valid, X_test, Y_test
 
     elif valid_ratio is not None:
         n_valid = int(len(X_path) * valid_ratio)
@@ -213,7 +213,7 @@ def auto_split_fast_raw_data(X_path, Y_int, valid_ratio=0.1, test_ratio=None, se
         Y_train = df_train['label'].values
         Y_valid = df_valid['label'].values
 
-        return X_train, Y_train, all_class, X_valid, Y_valid
+        return X_train, Y_train, X_valid, Y_valid
 
     else:
         df_train = df

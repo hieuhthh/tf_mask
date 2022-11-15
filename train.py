@@ -48,7 +48,7 @@ all_class += extra_class
 
 Y_train = [all_class.index(x) for x in Y_train]
 
-X_train, Y_train, all_class, X_valid, Y_valid = auto_split_fast_raw_data(X_train, Y_train, valid_ratio, test_ratio, seed)
+X_train, Y_train, X_valid, Y_valid = auto_split_fast_raw_data(X_train, Y_train, valid_ratio, test_ratio, seed)
     
 train_n_images = len(Y_train)
 train_dataset = build_dataset_from_X_Y(X_train, Y_train, all_class, train_with_labels, label_mode, img_size,
@@ -70,8 +70,11 @@ tf.compat.v1.reset_default_graph()
 strategy = auto_select_accelerator()
 
 with strategy.scope():
-    base = get_base_model(base_name, input_shape)
-    emb_model = create_emb_model(base, final_dropout, have_emb_layer, emb_dim)
+    # base = get_base_model(base_name, input_shape)
+    # emb_model = create_emb_model(base, final_dropout, have_emb_layer, emb_dim)
+    
+    emb_model = tf.keras.models.load_model('download/encoder_v1_best_model_EfficientNetV2S_160_512_364103.h5')
+
     model = create_model(input_shape, emb_model, n_labels, use_normdense, use_cate_int)
     model.summary()
 
