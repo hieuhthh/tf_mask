@@ -1,13 +1,13 @@
 route: ./
 seed: 42
-CUDA_VISIBLE_DEVICES: 0,1
+CUDA_VISIBLE_DEVICES: 0
 
 im_size: 160
 im_size_before_crop: 180 # ~ for not using this
 label_mode: cate_int
 BATCH_SIZE: 128
 
-valid_ratio: 0.1
+valid_ratio: 0.01
 test_ratio: ~
 
 train_with_labels: True

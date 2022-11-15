@@ -7,8 +7,8 @@ globals().update(settings)
 
 des = path_join(route, 'dataset')
 
-# mkdir(des)
-force_mkdir(des)
+mkdir(des)
+# force_mkdir(des)
 
 def count_file(route):
     file_count = sum(len(files) for _, _, files in os.walk(route))
@@ -76,9 +76,21 @@ def move_folder_multiprocessing(route, pad=None):
 print('N class before:', len(os.listdir(des)))
 print('N image before:', count_file(des))
 
-from_folder = '/home/huynx2/hieunmt/other/tf_img_pipeline/unzip/dataset'
+from_folder = '/home/lap14880/hieunmt/tf_mask/unzip/AFDB_masked_face_dataset'
 # move_folder(from_folder)
 move_folder_multiprocessing(from_folder)
+
+from_folder = '/home/lap14880/hieunmt/tf_mask/unzip/final'
+move_folder_multiprocessing(from_folder)
+
+from_folder = '/home/lap14880/hieunmt/tf_mask/unzip/masked_ms1m'
+move_folder_multiprocessing(from_folder)
+
+from_folder = '/home/lap14880/hieunmt/tf_mask/unzip/RWMFD_part_2_pro'
+move_folder_multiprocessing(from_folder)
+
+# from_folder = '/home/lap14880/face_bucket_huy/masked_glint'
+# move_folder_multiprocessing(from_folder)
 
 print('N class:', len(os.listdir(des)))
 print('N image:', count_file(des))

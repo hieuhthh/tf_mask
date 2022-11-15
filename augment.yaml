@@ -7,7 +7,7 @@ rotate: 10 # degree
 cutout_prob: 0.2
 cutout_pad_factor: 0.2
 
-color_prob: 0.6
+color_prob: 0.8
 sature: [0.9, 1.1]
 contrast: [0.9, 1.1]
 brightness: 0.1

@@ -6,7 +6,7 @@ from sklearn.model_selection import KFold, StratifiedKFold
 import tensorflow as tf
 import multiprocessing
 
-def get_data_from_phrase_multiprocessing(route, phrase=None):
+def get_data_from_phrase_multiprocessing(route, phrase=None, use_y_int=True):
     """
     using multiprocessing
     input:
@@ -24,11 +24,15 @@ def get_data_from_phrase_multiprocessing(route, phrase=None):
         X = []
         Y = []
 
-        for cl in list_cls:
+        for cl in list_cls[:10]:
             path2cl = os.path.join(phrase_path, cl)
             temp = glob(path2cl + '/*')
             X += temp
-            Y += len(temp) * [all_class.index(cl)]
+            if use_y_int:
+                label = all_class.index(cl)
+            else:
+                label = cl
+            Y += len(temp) * [label]
 
         return X, Y
 
@@ -175,6 +179,67 @@ def auto_split_data_multiprocessing_faster(route, valid_ratio=0.1, test_ratio=No
 
         return X_train, Y_train, all_class
 
+def auto_split_fast_raw_data(X_path, Y_int, valid_ratio=0.1, test_ratio=None, seed=42):
+    df = pd.DataFrame({'image':X_path, 'label':Y_int})
+    df = df.sample(frac=1.0, random_state=seed).reset_index(drop=True)
+
+    if valid_ratio is not None and test_ratio is not None:
+        n_test = int(len(X_path) * test_ratio)
+        n_valid = int(len(X_path) * valid_ratio)
+
+        df_test = df[:n_test]
+        df_valid = df[n_test:n_test+n_valid]
+        df_train = df[n_test+n_valid:]
+
+        X_test = df_test['image'].values
+        X_valid = df_valid['image'].values
+        X_train = df_train['image'].values
+
+        Y_test = df_test['label'].values
+        Y_valid = df_valid['label'].values
+        Y_train = df_train['label'].values
+
+        return X_train, Y_train, all_class, X_valid, Y_valid, X_test, Y_test
+
+    elif valid_ratio is not None:
+        n_valid = int(len(X_path) * valid_ratio)
+
+        df_train = df[n_valid:]
+        df_valid = df[:n_valid]
+
+        X_train = df_train['image'].values
+        X_valid = df_valid['image'].values
+
+        Y_train = df_train['label'].values
+        Y_valid = df_valid['label'].values
+
+        return X_train, Y_train, all_class, X_valid, Y_valid
+
+    else:
+        df_train = df
+
+        X_train = df_train['image'].values
+
+        Y_train = df_train['label'].values
+
+        return X_train, Y_train, all_class
+
+# if __name__ == '__main__':
+#     from utils import *
+
+#     settings = get_settings()
+#     globals().update(settings)
+
+#     route_dataset = path_join(route, 'dataset')
+
+#     X_train, Y_train, all_class, X_valid, Y_valid = auto_split_data_multiprocessing_faster(route_dataset, valid_ratio, test_ratio, seed)
+    
+#     print(len(all_class))
+#     print(len(X_train))
+#     print(len(X_valid))
+#     print(X_train[0])
+#     print(Y_train[0])
+
 if __name__ == '__main__':
     from utils import *
 
@@ -183,8 +248,29 @@ if __name__ == '__main__':
 
     route_dataset = path_join(route, 'dataset')
 
-    X_train, Y_train, all_class, X_valid, Y_valid = auto_split_data_multiprocessing_faster(route_dataset, valid_ratio, test_ratio, seed)
+    X_train, Y_train, all_class = get_data_from_phrase_multiprocessing(route_dataset, None, use_y_int=False)
+
+    route_extra = '/home/lap14880/face_bucket_huy/masked_glint'
+    X_extra, Y_extra, extra_class = get_data_from_phrase_multiprocessing(route_extra, None, use_y_int=False)
     
+    print(len(all_class))
+    print(len(X_train))
+    print(X_train[0])
+    print(Y_train[0])
+
+    print(len(extra_class))
+    print(len(X_extra))
+    print(X_extra[0])
+    print(Y_extra[0])
+
+    X_train += X_extra
+    Y_train += Y_extra
+    all_class += extra_class
+
+    Y_train = [all_class.index(x) for x in Y_train]
+
+    X_train, Y_train, all_class, X_valid, Y_valid = auto_split_fast_raw_data(X_train, Y_train, valid_ratio, test_ratio, seed)
+
     print(len(all_class))
     print(len(X_train))
     print(len(X_valid))
