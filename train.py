@@ -84,13 +84,27 @@ with strategy.scope():
                                     margin1=arcface_margin1,
                                     margin2=arcface_margin2,
                                     margin3=arcface_margin3),
-        'embedding' : SupervisedContrastiveLoss(temperature=sup_con_temperature),
+        'sequential' : SupervisedContrastiveLoss(temperature=sup_con_temperature),
     }
 
     loss_weights = {
         'cate_output' : arc_face_weight,
-        'embedding' : sup_con_weight,
+        'sequential' : sup_con_weight,
     }
+
+    # losses = {
+    #     'cate_output' : ArcfaceLoss(from_logits=True, 
+    #                                 label_smoothing=arcface_label_smoothing,
+    #                                 margin1=arcface_margin1,
+    #                                 margin2=arcface_margin2,
+    #                                 margin3=arcface_margin3),
+    #     'embedding' : SupervisedContrastiveLoss(temperature=sup_con_temperature),
+    # }
+
+    # loss_weights = {
+    #     'cate_output' : arc_face_weight,
+    #     'embedding' : sup_con_weight,
+    # }
 
     metrics = {
         'cate_output' : tf.keras.metrics.CategoricalAccuracy()
