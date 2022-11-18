@@ -34,7 +34,7 @@ print('epochs:', epochs)
 seedEverything(seed)
 print('BATCH_SIZE:', BATCH_SIZE)
 
-route_dataset = path_join(route, 'dataset')
+route_dataset = path_join(route, 'dataset_clean')
 print('route_dataset:', route_dataset)
 
 X_train, Y_train, all_class = get_data_from_phrase_multiprocessing(route_dataset, None, use_y_int=False)

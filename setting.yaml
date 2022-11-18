@@ -1,5 +1,5 @@
 route: ./
-seed: 42
+seed: 128
 CUDA_VISIBLE_DEVICES: "0"
 
 im_size: 160
@@ -7,7 +7,7 @@ im_size_before_crop: 180 # ~ for not using this
 label_mode: cate_int
 BATCH_SIZE: 256
 
-valid_ratio: 0.01
+valid_ratio: 0.001
 test_ratio: ~
 
 train_with_labels: True
@@ -26,7 +26,7 @@ have_emb_layer: True
 emb_dim: 512
 use_normdense: True
 
-pretrained: ~
+pretrained: save_models/first_train_best_model_EfficientNetV2S_160_512_88576.h5
 
 arcface_label_smoothing: 0
 arcface_margin1: 1.0
@@ -42,6 +42,6 @@ mode: min
 
 max_lr: 1.0e-3
 min_lr: 1.0e-5
-cycle_epoch: 10
+cycle_epoch: 20
 n_cycle: 1
 save_weights_only: False
