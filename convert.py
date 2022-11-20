@@ -16,7 +16,7 @@ mkdir(des)
 
 # model_weight = path_join(route, 'best_model_EfficientNetV2S_160_512_364103.h5')
 model_weight = '/home/lap14880/hieunmt/tf_mask/save_models/first_train_best_model_EfficientNetV2S_160_512_88576.h5'
-encoder_name = 'encoder_v' + str(len(os.listdir(des)) + 1) + '_' + model_weight.split('/')[-1]
+encoder_name = 'mask_encoder_v' + str(len(os.listdir(des)) + 1) + '_' + model_weight.split('/')[-1]
 encoder_save = path_join(des, encoder_name)
 
 img_size = (im_size, im_size)
